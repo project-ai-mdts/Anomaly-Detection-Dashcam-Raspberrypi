@@ -1,0 +1,64 @@
+# =========================================
+# EDGE AI POTHOLE DETECTION CONFIG (Laptop + Raspberry Pi)
+# =========================================
+
+system:
+  # opencv | libcamera | video
+  camera_source: "opencv"
+
+  # Only used when camera_source=video
+  video_path: "C:/Users/Rounak/tensorflow_project/WhatsApp Video 2026-02-12 at 5.35.27 PM.mp4"
+  loop_video: true
+
+  # Only used when camera_source=opencv
+  camera_id: 0
+
+  resolution: [640, 480]
+  requested_fps: 30
+
+  # Model input size (matches your float16 model)
+  input_size: [320, 320]
+
+  # false -> show preview window (laptop only)
+  # true  -> headless mode (recommended on Pi)
+  headless: true
+
+
+model:
+  backend: "tflite"
+  path: "best_float16.tflite"
+
+  # Start low; your debug suggests scores may peak around ~0.30 for row4
+  conf_threshold: 0.20
+  iou_threshold: 0.45
+  threads: 4
+
+  score_mode: "row4"
+  rgb: true
+  normalize: true
+
+
+logging:
+  buffer_duration: 3
+  post_event_seconds: 1
+  cooldown_sec: 6
+
+  log_dir: "data/logs"
+  clips_dir: "data/clips"
+
+  max_storage_mb: 500
+  repack_h264: true
+
+
+dashboard:
+  host: "0.0.0.0"
+  port: 5000
+  update_interval: 2
+
+  live_stream: true
+  stream_fps: 12
+
+  auto_stop_on_tab_close: true
+  idle_shutdown_sec: 5
+
+
